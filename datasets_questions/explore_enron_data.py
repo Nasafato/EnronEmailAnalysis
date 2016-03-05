@@ -28,12 +28,21 @@ def main():
 
     poi_count = 0
     poi_without_total_payments = 0
+
+    print("Keys = {}".format(enron_data.values()[0]))
+
+
+    restricted_stock_deferred = 0
     for i in enron_data.values():
         if i["poi"] == 1:
             poi_count += 1
             if i["total_payments"] == 'NaN':
                 poi_without_total_payments += 1
+        if i['restricted_stock_deferred'] != 'NaN':
+            restricted_stock_deferred += 1
 
+
+    print("People with restricted stock deferred = {}".format(restricted_stock_deferred))
     print("PoI's without total payments: {}".format(poi_without_total_payments))
     print("Percentage PoI's without total payments: {}".format(float(poi_without_total_payments)/poi_count))
 

@@ -55,7 +55,7 @@ outliers = [
 for outlier_key in outliers:
     del data_dict[outlier_key]
 
-features_list = target_label + financial_features + email_features
+features_list = financial_features + email_features
 data = featureFormat(data_dict, features_list)
 target, features = targetFeatureSplit( data )
 
@@ -63,9 +63,14 @@ target, features = targetFeatureSplit( data )
 selector = SelectKBest(k=10)
 selector.fit(features, target)
 feature_names = [features_list[i] for i in selector.get_support(indices=True)]
+feature_scores = [selector.scores_[i] for i in selector.get_support(indices=True)]
+
+print(feature_names)
+print(feature_scores)
+
 features_list = target_label + feature_names
 
-# poi_message_ratios - ratio of poi messages to total messages
+# Add poi_message_ratios - ratio of poi messages to total messages
 for name in data_dict:
     try:
         total_messages = data_dict[name]['from_messages'] + data_dict[name]['to_messages']
@@ -117,6 +122,8 @@ print(accuracy_score(labels_test, predictions))
 print(precision_score(labels_test, predictions))
 print(recall_score(labels_test, predictions))
 
-clf = log_clf
+# clf = log_clf
+# clf = nb_clf
+clf = kmeans_clf
 
 dump_classifier_and_data(clf, my_dataset, features_list)
